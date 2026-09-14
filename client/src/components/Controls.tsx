@@ -15,6 +15,19 @@ export default function Controls({ state, busy, onAction }: ControlsProps) {
   const myPlayer = state.players.find((player) => player.id === state.turn);
   const disabled = busy || state.status !== "playing";
 
+  const nearbyCells = myPlayer
+    ? [
+        { x: myPlayer.x, y: myPlayer.y },
+        { x: myPlayer.x + 1, y: myPlayer.y },
+        { x: myPlayer.x - 1, y: myPlayer.y },
+        { x: myPlayer.x, y: myPlayer.y + 1 },
+        { x: myPlayer.x, y: myPlayer.y - 1 },
+      ]
+    : [];
+  const hasNearbyCrystal = state.crystals.some((c) =>
+    nearbyCells.some((cell) => cell.x === c.x && cell.y === c.y),
+  );
+
   const fire = (action: ActionPayload): void => {
     setMode("none");
     void onAction(action);
@@ -45,10 +58,11 @@ export default function Controls({ state, busy, onAction }: ControlsProps) {
           type="button"
           data-testid="btn-reunir"
           className="control-button"
-          disabled={disabled}
+          disabled={disabled || !hasNearbyCrystal}
           onClick={() => fire({ type: "collect" })}
+          title="Reúne los cristales de tu celda y las adyacentes"
         >
-          💠 Reunir (+12⚡)
+          💠 Reunir
         </button>
         <button
           type="button"

@@ -78,9 +78,10 @@ export default function StartScreen({ onStart, notice }: StartScreenProps) {
               (+12 de energía).
             </li>
             <li>
-              <strong>Reunir</strong>: si tu nave está sobre un cristal 💠 al
-              iniciar tu turno (por ejemplo, porque derivó hacia ti), obtienes{" "}
-              <strong>+12 de energía</strong> sin gastar el movimiento.
+              <strong>Reunir</strong>: recoge <strong>todos</strong> los
+              cristales que estén en tu celda o en las 4 celdas adyacentes{" "}
+              (<strong>+12 de energía</strong> cada uno), sin gastar el
+              movimiento.
             </li>
             <li>
               <strong>Disparar</strong> (cuesta 8 de energía): un rayo viaja en

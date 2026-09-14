@@ -30,6 +30,7 @@ hizo, qué revisó y editó el estudiante, para que la defensa quede clara.
 ## Modificaciones manuales posteriores a la generación asistida
 
 - Elección final de costos/daños (8⚡ disparo, 10⚡ escudo, +12 reunir, +2 pasar, −15/−5).
-- Decisión de separar "Reunir" de "Mover".
+- Decisión final del sistema de energía: mover sobre un cristal lo recolecta,
+  deriva suave de cristales y **Reunir** como "imán" de cristales adyacentes.
 - Configuración de puerto variable para pruebas en máquinas con el 3000 ocupado.
 - Ajustes de estilo y textos en `docs/` según la rúbrica.

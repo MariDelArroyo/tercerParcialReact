@@ -104,10 +104,13 @@ construcción y un solo comando de inicio).
 3. **Reunir separado de mover… y vuelto a combinar.** Inicialmente moverse
    sobre un cristal lo recogía; se separó en la acción **Reunir** para dar peso a
    la decisión. Tras jugar, los cristales resultaban casi imposibles de
-   recolectar (deriva total cada turno contra naves de 1 celda). Decisión final:
-   la **deriva es suave** (≈35% por turno) y **mover sobre un cristal lo
-   recolecta al pasar**, manteniendo **Reunir** para los cristales que derivan y
-   quedan bajo la nave al iniciar turno.
+   recolectar, y mover sobre un cristal volvió a recogerlo automáticamente.
+   Decisión final sobre la economía de energía:
+   - **Mover** sobre un cristal lo **recolecta al pasar** (+12⚡).
+   - La deriva de cristales es **suave** (≈35% por turno).
+   - La acción **Reunir** se rediseñó como "imán": recoge de una vez todos los
+     cristales de la celda propia y las 4 adyacentes (+12⚡ cada uno), dándole un
+     propósito claro (acumular sin mover la nave) y conservando las 5 acciones.
 4. **Puerto configurable y E2E reutilizable.** Se detectó en la máquina de
    desarrollo que el puerto 3000 estaba ocupado por otro proyecto; se parametrizó
    `PORT/BASE_URL/VITE_PROXY_TARGET` para las pruebas locales contra producción.

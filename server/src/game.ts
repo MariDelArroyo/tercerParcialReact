@@ -357,19 +357,34 @@ export function applyAction(
     }
 
     case "collect": {
-      const crystal = state.crystals.find(
-        (c) => c.x === player.x && c.y === player.y,
+      const nearbyCells = [
+        { x: player.x, y: player.y },
+        { x: player.x + 1, y: player.y },
+        { x: player.x - 1, y: player.y },
+        { x: player.x, y: player.y + 1 },
+        { x: player.x, y: player.y - 1 },
+      ];
+      const nearby = state.crystals.filter((c) =>
+        nearbyCells.some((cell) => cell.x === c.x && cell.y === c.y),
       );
-      if (crystal === undefined) {
-        throw new GameError("No hay un cristal en tu celda.");
+      if (nearby.length === 0) {
+        throw new GameError(
+          "No hay cristales en tu celda ni en las adyacentes.",
+        );
       }
-      state.crystals = state.crystals.filter((c) => c.id !== crystal.id);
+      const collectedIds = new Set(nearby.map((c) => c.id));
+      state.crystals = state.crystals.filter(
+        (c) => !collectedIds.has(c.id),
+      );
+      const energyBefore = player.energy;
       player.energy = Math.min(
         MAX_ENERGY,
-        player.energy + COLLECT_ENERGY,
+        player.energy + nearby.length * COLLECT_ENERGY,
       );
+      const gained = player.energy - energyBefore;
+      const plural = nearby.length === 1 ? "cristal cercano" : "cristales cercanos";
       messages.push(
-        `${player.name} reunió un cristal (+${COLLECT_ENERGY}⚡).`,
+        `${player.name} reunió ${nearby.length} ${plural} (+${gained}⚡).`,
       );
       break;
     }

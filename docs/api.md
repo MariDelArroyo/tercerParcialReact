@@ -109,6 +109,8 @@ Ejecuta una acción del jugador cuyo turno es.
 ```json
 { "player": 2, "action": { "type": "collect" } }
 ```
+> `collect` recoge todos los cristales de la celda propia y las 4 celdas
+> adyacentes (+12⚡ por cristal, con tope de energía máxima).
 ```json
 { "player": 2, "action": { "type": "shield" } }
 ```

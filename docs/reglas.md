@@ -25,7 +25,7 @@
 | Acción | Costo | Efecto |
 | --- | --- | --- |
 | **Mover** | 0⚡ | Desplaza la nave 1 celda (arriba/abajo/izquierda/derecha). No se puede salir del tablero ni entrar a la celda del rival. Si la nave termina sobre un cristal, lo **recolecta automáticamente** (+12⚡). |
-| **Reunir** | 0⚡ | Si la nave inicia el turno sobre un cristal, gana **+12⚡** sin gastar el movimiento. |
+| **Reunir** | 0⚡ | Recolecta **todos** los cristales de la celda propia y las 4 adyacentes (**+12⚡** cada uno), sin gastar el movimiento. |
 | **Disparar** | 8⚡ | Lanza un rayo en línea recta (una de las 4 direcciones). Recorre la fila/columna; los **cristales bloquean** el rayo. Golpea a la nave rival si está en la misma línea. |
 | **Escudo** | 10⚡ | Activa un escudo por hasta 2 turnos propios. Reduce el próximo disparo recibido a **−5** de casco y consume el escudo. No se puede activar con otro escudo activo. |
 | **Pasar** | 0⚡ | No hace nada más que sumar **+2⚡** y ceder el turno. |
@@ -59,10 +59,11 @@ El jugador debe decidir entre alternativas con consecuencias diferentes:
 
 - **Disparar pronto** gasta 8⚡ pero daña al rival; si el rayo queda bloqueado, la
   energía se pierde igual.
-- **Reunir** acelera la economía: la forma más sencilla es **moverse sobre un
-  cristal** (se recolecta al pasar); la acción **Reunir** se reserva para los
-  cristales que derivan y quedan bajo la nave.
-- **Moverse** cambia la línea de tiro, acerca al rival y permite cazar cristales.
+- **Reunir** acelera la economía: recoge de una vez los cristales adyacentes
+  sin mover la nave (ideal para cúmulos), pero gasta el turno que podrías usar
+  para disparar o reposicionarte.
+- **Moverse** cambia la línea de tiro, acerca al rival y permite cazar
+  cristales (se recolectan al pisarlos).
 - **Pasar** es la opción segura: recupera un poco de energía sin riesgo.
 
 ## Acciones inválidas (casos límite)
@@ -72,7 +73,7 @@ El backend rechaza con `400` y un mensaje claro (visible en pantalla):
 - Formulario de inicio con **nombres vacíos**.
 - Actuar cuando **no es tu turno**.
 - **Moverse fuera del tablero** o **sobre la celda del rival**.
-- **Reunir sin cristal** en la celda.
+- **Reunir sin cristales** en la celda propia o adyacentes.
 - **Disparar sin energía** (menos de 8⚡).
 - **Activar escudo ya activo** o sin energía suficiente.
 - Enviar acciones de un **tipo o dirección inválidos**.
