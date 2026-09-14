@@ -1,0 +1,53 @@
+# Despliegue de la aplicación completa a Render vía Deploy Hook.
+# Requiere los siguientes secretos en el repositorio:
+#   - RENDER_DEPLOY_HOOK_URL: URL del Deploy Hook del servicio en Render
+#   - RENDER_PUBLIC_URL:     URL pública de la aplicación desplegada (verificación)
+name: Deploy a Render
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    name: Compilar y publicar
+    runs-on: ubuntu-latest
+    steps:
+      - name: Descargar código
+        uses: actions/checkout@v4
+
+      - name: Instalar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: npm
+
+      - name: Instalar dependencias
+        run: npm ci
+
+      - name: Compilar frontend y backend
+        run: npm run build
+
+      - name: Confirmar que el build quedó armado
+        run: |
+          test -d client/dist && echo "Frontend OK"
+          test -f server/dist/index.js && echo "Backend OK"
+
+      - name: Llamar al Deploy Hook de Render
+        if: env.RENDER_DEPLOY_HOOK_URL != ''
+        env:
+          RENDER_DEPLOY_HOOK_URL: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
+        run: |
+          curl -fsS -X POST "$RENDER_DEPLOY_HOOK_URL" && echo "Deploy solicitado"
+
+      - name: Verificar aplicación publicada
+        if: env.RENDER_PUBLIC_URL != ''
+        env:
+          RENDER_PUBLIC_URL: ${{ secrets.RENDER_PUBLIC_URL }}
+        run: |
+          curl -fsS -o /dev/null -w "HTTP %{http_code}\n" "${RENDER_PUBLIC_URL}/api/health"
+          curl -fsS -o /dev/null -w "HTTP %{http_code}\n" "${RENDER_PUBLIC_URL}"

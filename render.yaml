@@ -1,0 +1,19 @@
+# Render Blueprint: despliegue opcional de la aplicación completa con un clic.
+# Se puede crear la aplicación desde este archivo en Render:
+#   New -> Blueprint -> este repositorio
+# O bien crear un Web Service apuntando a este repositorio con:
+#   Root directory: (raíz del repositorio)
+#   Build command:  npm install && npm run build
+#   Start command:  npm start
+# Render inyecta la variable PORT automáticamente; el servidor la respeta.
+services:
+  - type: web
+    name: nebula-duel
+    runtime: node
+    plan: free
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_VERSION
+        value: "22"
