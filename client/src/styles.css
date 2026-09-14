@@ -91,13 +91,13 @@ body {
    =========================== */
 .start-screen {
   display: flex;
-  align-items: center;
-  justify-content: center;
   height: 100vh;
+  overflow-y: auto;
   padding: 20px;
 }
 
 .start-card {
+  margin: auto;
   background: var(--bg-card);
   border: 1px solid var(--border);
   border-radius: 12px;

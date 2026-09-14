@@ -101,9 +101,13 @@ construcción y un solo comando de inicio).
    pruebas E2E deterministas y fáciles de defender.
 2. **Meteorito → cometa.** Se afinó la mecánica para que el evento ambiental
    dañe naves y cristales, aumentando la variabilidad y el dinamismo visual.
-3. **Reunir separado de mover.** Inicialmente moverse sobre un cristal lo
-   recogía; se cambió para forzar la decisión de "parqueo" y darle peso real a la
-   acción **Reunir**.
+3. **Reunir separado de mover… y vuelto a combinar.** Inicialmente moverse
+   sobre un cristal lo recogía; se separó en la acción **Reunir** para dar peso a
+   la decisión. Tras jugar, los cristales resultaban casi imposibles de
+   recolectar (deriva total cada turno contra naves de 1 celda). Decisión final:
+   la **deriva es suave** (≈35% por turno) y **mover sobre un cristal lo
+   recolecta al pasar**, manteniendo **Reunir** para los cristales que derivan y
+   quedan bajo la nave al iniciar turno.
 4. **Puerto configurable y E2E reutilizable.** Se detectó en la máquina de
    desarrollo que el puerto 3000 estaba ocupado por otro proyecto; se parametrizó
    `PORT/BASE_URL/VITE_PROXY_TARGET` para las pruebas locales contra producción.

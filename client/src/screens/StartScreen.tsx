@@ -73,11 +73,14 @@ export default function StartScreen({ onStart, notice }: StartScreenProps) {
             </li>
             <li>
               <strong>Mover</strong>: desplazarse una celda en cualquier
-              dirección. No puedes entrar en la celda del rival.
+              dirección. No puedes entrar en la celda del rival. Si mueves tu
+              nave sobre un cristal 💠, lo <strong>recolectas al pasar</strong>{" "}
+              (+12 de energía).
             </li>
             <li>
-              <strong>Reunir</strong>: si tu nave está sobre un cristal 💠,
-              obtienes <strong>+12 de energía</strong>.
+              <strong>Reunir</strong>: si tu nave está sobre un cristal 💠 al
+              iniciar tu turno (por ejemplo, porque derivó hacia ti), obtienes{" "}
+              <strong>+12 de energía</strong> sin gastar el movimiento.
             </li>
             <li>
               <strong>Disparar</strong> (cuesta 8 de energía): un rayo viaja en

@@ -7,8 +7,9 @@ para **dos jugadores** que comparten el mismo dispositivo (modo "hot seat" o
 "pantalla partida"). Cada jugador comanda una nave en una nebulosa: 🚀 (Capitán 1)
 y 👾 (Capitán 2).
 
-La nebulosa está llena de **cristales de energía** 💠 que se desplazan con el
-paso de los turnos. Reunir cristales otorga energía; la energía permite disparar
+La nebulosa está llena de **cristales de energía** 💠 que derivan suavemente con
+el paso de los turnos; mover tu nave sobre uno lo recolecta al pasar, y reunir
+cristales otorga energía. La energía permite disparar
 rayos y activar escudos. Además, cada cierto turnos entra un **cometa** ☄️ que
 cruza el tablero destruyendo todo lo que encuentra a su paso.
 

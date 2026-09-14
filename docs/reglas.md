@@ -13,9 +13,9 @@
   juego en pantalla.
 - Cada jugador tiene: **posición** (x, y), **casco** (vida, empieza en 100) y
   **energía** (empieza en 20, máximo 30).
-- En el tablero hay **5 cristales** 💠 en posiciones aleatorias que **se mueven**
-  una celda en dirección aleatoria en cada paso ambiental y desaparecen tras un
-  máximo de edad (variabilidad).
+- En el tablero hay **5 cristales** 💠 en posiciones aleatorias que **derivan**
+  de forma suave: cada cristal se mueve una celda al azar solo en parte del paso
+  ambiental (≈35% por turno) y desaparece tras una edad máxima (variabilidad).
 - Cada 4 turnos entra un **cometa** ☄️ en un borde aleatorio, **cruza el tablero**
   una casilla por turno, daña naves (−12 de casco) y destruye cristales
   (variabilidad y elementos en movimiento).
@@ -24,8 +24,8 @@
 
 | Acción | Costo | Efecto |
 | --- | --- | --- |
-| **Mover** | 0⚡ | Desplaza la nave 1 celda (arriba/abajo/izquierda/derecha). No se puede salir del tablero ni entrar a la celda del rival. |
-| **Reunir** | 0⚡ | Si la nave está sobre un cristal, gana **+12⚡**. |
+| **Mover** | 0⚡ | Desplaza la nave 1 celda (arriba/abajo/izquierda/derecha). No se puede salir del tablero ni entrar a la celda del rival. Si la nave termina sobre un cristal, lo **recolecta automáticamente** (+12⚡). |
+| **Reunir** | 0⚡ | Si la nave inicia el turno sobre un cristal, gana **+12⚡** sin gastar el movimiento. |
 | **Disparar** | 8⚡ | Lanza un rayo en línea recta (una de las 4 direcciones). Recorre la fila/columna; los **cristales bloquean** el rayo. Golpea a la nave rival si está en la misma línea. |
 | **Escudo** | 10⚡ | Activa un escudo por hasta 2 turnos propios. Reduce el próximo disparo recibido a **−5** de casco y consume el escudo. No se puede activar con otro escudo activo. |
 | **Pasar** | 0⚡ | No hace nada más que sumar **+2⚡** y ceder el turno. |
@@ -34,7 +34,8 @@
 
 ## Elementos que se mueven
 
-1. **Cristales**: derivan una celda por paso ambiental.
+1. **Cristales**: derivan una celda al azar con ≈35% de probabilidad por paso
+   ambiental (deriva suave que los hace alcanzables).
 2. **Cometa**: aparece en un borde aleatorio cada 4 turnos y avanza una celda por
    turno hasta salir del tablero.
 3. **Rayos**: el proyectil se muestra recorriendo la línea de tiro antes de
@@ -58,10 +59,10 @@ El jugador debe decidir entre alternativas con consecuencias diferentes:
 
 - **Disparar pronto** gasta 8⚡ pero daña al rival; si el rayo queda bloqueado, la
   energía se pierde igual.
-- **Reunir** acelera la economía, pero expone a que el rival dispare mientras se
-  parquea sobre un cristal.
-- **Escudo** protege pero consume energía que podría usarse para disparar.
-- **Moverse** cambia la línea de tiro y aleja o acerca al rival.
+- **Reunir** acelera la economía: la forma más sencilla es **moverse sobre un
+  cristal** (se recolecta al pasar); la acción **Reunir** se reserva para los
+  cristales que derivan y quedan bajo la nave.
+- **Moverse** cambia la línea de tiro, acerca al rival y permite cazar cristales.
 - **Pasar** es la opción segura: recupera un poco de energía sin riesgo.
 
 ## Acciones inválidas (casos límite)

@@ -81,11 +81,12 @@ npm run test:e2e:headed  # Pruebas E2E visuales en Chrome
 1. En la pantalla de inicio se escriben los **dos nombres** y se pulsa
    **Comenzar partida**.
 2. Cada turno el jugador activo elige **una acción**:
-   **Mover**, **Reunir** (+12⚡ sobre un cristal), **Disparar** (8⚡, línea
-   recta, los cristales bloquean), **Escudo** (10⚡, reduce el próximo impacto a −5)
+   **Mover** (si pisas un cristal 💠 lo recolectas, +12⚡), **Reunir**
+   (+12⚡ si hay un cristal bajo tu nave), **Disparar** (8⚡, línea recta, los
+   cristales bloquean), **Escudo** (10⚡, reduce el próximo impacto a −5)
    o **Pasar** (+2⚡).
-3. Los **cristales** 💠 derivan por el tablero y un **cometa** ☄️ cruza cada 4
-   turnos dañando lo que toca (−12).
+3. Los **cristales** 💠 derivan suavemente por el tablero y un **cometa** ☄️ cruza
+   cada 4 turnos dañando lo que toca (−12).
 4. **Termina** cuando un casco llega a 0, o al límite de **60 turnos** (gana el
    de más casco; empate si igualan).
 

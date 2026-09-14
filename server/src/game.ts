@@ -27,6 +27,7 @@ const COLLECT_ENERGY = 12;
 const PASS_ENERGY = 2;
 const CRYSTAL_TARGET = 5;
 const CRYSTAL_MAX_AGE = 16;
+const CRYSTAL_DRIFT_CHANCE = 0.35;
 const METEOR_INTERVAL = 4;
 const METEOR_DAMAGE = 12;
 const LOG_LIMIT = 14;
@@ -157,11 +158,13 @@ function advanceEnvironment(
 ): void {
   /* ── Cristales ── */
   for (const c of state.crystals) {
-    const cdx = randomInt(-1, 1);
-    const cdy = randomInt(-1, 1);
-    c.x = clamp(c.x + cdx, 0, BOARD_W - 1);
-    c.y = clamp(c.y + cdy, 0, BOARD_H - 1);
     c.age += 1;
+    if (Math.random() < CRYSTAL_DRIFT_CHANCE) {
+      const cdx = randomInt(-1, 1);
+      const cdy = randomInt(-1, 1);
+      c.x = clamp(c.x + cdx, 0, BOARD_W - 1);
+      c.y = clamp(c.y + cdy, 0, BOARD_H - 1);
+    }
   }
   state.crystals = state.crystals.filter((c) => c.age < CRYSTAL_MAX_AGE);
 
@@ -334,6 +337,22 @@ export function applyAction(
       messages.push(
         `${player.name} se movió hacia ${directionName(dir)}.`,
       );
+
+      const landedCrystal = state.crystals.find(
+        (c) => c.x === player.x && c.y === player.y,
+      );
+      if (landedCrystal !== undefined) {
+        state.crystals = state.crystals.filter(
+          (c) => c.id !== landedCrystal.id,
+        );
+        player.energy = Math.min(
+          MAX_ENERGY,
+          player.energy + COLLECT_ENERGY,
+        );
+        messages.push(
+          `${player.name} recogió un cristal al moverse (+${COLLECT_ENERGY}⚡).`,
+        );
+      }
       break;
     }
 
