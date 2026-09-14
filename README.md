@@ -5,7 +5,7 @@ dispositivo. Frontend **React + TypeScript + Vite**, backend **Express +
 TypeScript**, comunicación REST con JSON y `fetch`, pruebas **Playwright** y
 publicación en **Render** vía GitHub Actions.
 
-> 🔗 **Aplicación publicada:** https://tu-app.onrender.com _(completar la URL real del despliegue)_
+> 🔗 **Aplicación publicada:** https://nebula-duel.onrender.com
 
 ---
 

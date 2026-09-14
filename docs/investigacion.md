@@ -51,10 +51,10 @@ producción") queda demostrada con el juego ya desplegado:
 
 ```bash
 # PowerShell
-$env:BASE_URL="https://tu-app.onrender.com"; npm run test:e2e:headed
+$env:BASE_URL="https://nebula-duel.onrender.com"; npm run test:e2e:headed
 
 # bash
-BASE_URL="https://tu-app.onrender.com" npm run test:e2e:headed
+BASE_URL="https://nebula-duel.onrender.com" npm run test:e2e:headed
 ```
 
 ### Lo que cubren las pruebas end-to-end
@@ -125,7 +125,7 @@ E2E → deploy y Render reconstruye ypublica la aplicación.
 ### Verificación del despliegue
 
 ```bash
-curl https://tu-app.onrender.com/api/health   # → {"ok":true}
+curl https://nebula-duel.onrender.com/api/health   # → {"ok":true}
 ```
 
 ## 3. Docker (decisión)
