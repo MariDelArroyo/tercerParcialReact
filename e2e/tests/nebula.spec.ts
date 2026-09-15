@@ -22,9 +22,7 @@ test.beforeAll(async () => {
   }
 });
 
-// ─────────────────────────────────────────────────────────
-//  Utilidad: crear una partida esperando la respuesta POST
-// ─────────────────────────────────────────────────────────
+//  Crear una partida esperando la respuesta POST
 async function createGameFromUI(
   page: import("@playwright/test").Page,
   player1: string,
@@ -92,9 +90,7 @@ async function passViaApi(
   return false;
 }
 
-// ===========================================================
 //  1. Inicio: la pantalla carga y permite crear la partida
-// ===========================================================
 test("inicio: formulario y creación de partida", async ({ page }) => {
   await page.goto("/");
   await expect(page.getByRole("heading", { name: /Nébula/i })).toBeVisible();
@@ -112,18 +108,14 @@ test("inicio: formulario y creación de partida", async ({ page }) => {
   await expect(page.getByTestId("tablero")).toBeVisible();
 });
 
-// ===========================================================
 //  2. Formulario vacío → mensaje de error visible
-// ===========================================================
 test("formulario vacío muestra error", async ({ page }) => {
   await page.goto("/");
   await page.getByRole("button", { name: "Comenzar partida" }).click();
   await expect(page.getByRole("alert")).toContainText(/obligatorios/i);
 });
 
-// ===========================================================
 //  3. Interacción principal: mover nave con el backend
-// ===========================================================
 test("mover la nave comunica con el backend y cambia de turno", async ({
   page,
 }) => {
@@ -145,9 +137,7 @@ test("mover la nave comunica con el backend y cambia de turno", async ({
   await expect(page.getByTestId("turno")).toContainText(/Beto/);
 });
 
-// ===========================================================
 //  4. Acción inválida: repetir el escudo activo
-// ===========================================================
 test("repetir escudo muestra error de validación", async ({ page }) => {
   await createGameFromUI(page, "Ana", "Beto");
 
@@ -161,9 +151,7 @@ test("repetir escudo muestra error de validación", async ({ page }) => {
   await expect(page.getByRole("alert")).toContainText(/escudo activo/i);
 });
 
-// ===========================================================
 //  5. Comunicación backend: GET devuelve el estado correcto
-// ===========================================================
 test("GET devuelve el estado de la partida recién creada", async ({
   page,
 }) => {
@@ -185,9 +173,7 @@ test("GET devuelve el estado de la partida recién creada", async ({
   expect(state.maxTurns).toBe(60);
 });
 
-// ===========================================================
 //  6. Finalización: partida termina en el límite de turnos
-// ===========================================================
 test("la partida finaliza al alcanzar el límite de turnos", async ({
   page,
 }) => {

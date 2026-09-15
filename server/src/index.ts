@@ -7,9 +7,7 @@ import type { GameState } from "./types";
 const app = express();
 app.use(express.json());
 
-/* =========================================================
-   Estado en memoria (aceptable para un demo educativo)
-   ========================================================= */
+/* Estado en memoria (aceptable para un demo educativo) */
 const games = new Map<string, GameState>();
 
 interface HistoryEntry {
@@ -22,9 +20,7 @@ interface HistoryEntry {
 }
 const history: HistoryEntry[] = [];
 
-/* =========================================================
-   Rutas API
-   ========================================================= */
+/* Rutas API */
 
 // Salud del servidor (útil para healthchecks)
 app.get("/api/health", (_req, res) => {
@@ -110,9 +106,7 @@ app.post("/api/games/:id/actions", (req, res) => {
   }
 });
 
-/* =========================================================
-   Servir el frontend compilado (mismo dominio y puerto)
-   ========================================================= */
+/* Servir el frontend compilado (mismo dominio y puerto) */
 const clientDist = path.join(__dirname, "..", "..", "client", "dist");
 app.use(express.static(clientDist));
 
@@ -129,9 +123,7 @@ app.use((req, res, next) => {
   next();
 });
 
-/* =========================================================
-   Iniciar servidor
-   ========================================================= */
+/* Iniciar servidor */
 const port = Number(process.env.PORT ?? 3000);
 
 app.listen(port, () => {

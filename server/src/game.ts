@@ -9,9 +9,7 @@ import type {
   ShotTrajectory,
 } from "./types";
 
-/* =========================================================
-   Constantes del juego
-   ========================================================= */
+/* Constantes del juego */
 const BOARD_W = 10;
 const BOARD_H = 8;
 const MAX_TURNS = 60;
@@ -32,9 +30,7 @@ const METEOR_INTERVAL = 4;
 const METEOR_DAMAGE = 12;
 const LOG_LIMIT = 14;
 
-/* =========================================================
-   Error propio para señalar acciones inválidas
-   ========================================================= */
+/* Error propio para señalar acciones inválidas */
 export class GameError extends Error {
   constructor(message: string) {
     super(message);
@@ -42,9 +38,7 @@ export class GameError extends Error {
   }
 }
 
-/* =========================================================
-   Helpers
-   ========================================================= */
+/* Helpers */
 let crystalSeq = 0;
 
 function randomInt(min: number, max: number): number {
@@ -102,9 +96,7 @@ function pushLogs(state: GameState, messages: string[]): void {
   }
 }
 
-/* =========================================================
-   Generación de cristales y meteoritos
-   ========================================================= */
+/* Generación de cristales y meteoritos */
 function spawnCrystals(
   state: GameState,
   count: number,
@@ -149,14 +141,12 @@ function spawnMeteor(): MeteorInfo {
   }
 }
 
-/* =========================================================
-   Paso ambiental (derrift de cristales + cometa)
-   ========================================================= */
+/* Paso ambiental (deriva de cristales + cometa) */
 function advanceEnvironment(
   state: GameState,
   envMessages: string[],
 ): void {
-  /* ── Cristales ── */
+  /* Cristales */
   for (const c of state.crystals) {
     c.age += 1;
     if (Math.random() < CRYSTAL_DRIFT_CHANCE) {
@@ -168,7 +158,7 @@ function advanceEnvironment(
   }
   state.crystals = state.crystals.filter((c) => c.age < CRYSTAL_MAX_AGE);
 
-  /* ── Cometa activo ── */
+  /* Cometa activo */
   if (state.meteor !== null) {
     state.meteor.x += state.meteor.dx;
     state.meteor.y += state.meteor.dy;
@@ -208,13 +198,11 @@ function advanceEnvironment(
     envMessages.push("☄️ ¡Un cometa entró en la nebulosa!");
   }
 
-  /* ── Mantener cantidad de cristales ── */
+  /* Mantener cantidad de cristales */
   state.crystals = spawnCrystals(state, CRYSTAL_TARGET);
 }
 
-/* =========================================================
-   Crear partida
-   ========================================================= */
+/* Crear partida */
 export function createGame(
   player1Name: string,
   player2Name: string,
@@ -265,24 +253,20 @@ export function createGame(
   return state;
 }
 
-/* =========================================================
-   Resultado de una acción
-   ========================================================= */
+/* Resultado de una acción */
 export interface ActionResult {
   state: GameState;
   messages: string[];
   shot: ShotTrajectory | null;
 }
 
-/* =========================================================
-   Procesar una acción
-   ========================================================= */
+/* Procesar una acción */
 export function applyAction(
   game: GameState,
   playerId: unknown,
   action: unknown,
 ): ActionResult {
-  /* ── Validaciones básicas ── */
+  /* Validaciones básicas */
   if (game.status !== "playing") {
     throw new GameError("La partida ya terminó.");
   }
@@ -310,13 +294,13 @@ export function applyAction(
     throw new GameError("Acción inválida.");
   }
 
-  /* ── Copia profunda para no mutar el original ── */
+  /* Copia profunda para no mutar el original */
   const state: GameState = structuredClone(game);
   const messages: string[] = [];
   const player = state.players.find((p) => p.id === playerId)!;
   let shot: ShotTrajectory | null = null;
 
-  /* ── Procesar acción ── */
+  /* Procesar acción */
   switch (actionType) {
     case "move": {
       const dir = (action as { direction?: unknown }).direction;
@@ -471,10 +455,10 @@ export function applyAction(
     }
   }
 
-  /* ── Persistir mensajes ── */
+  /* Persistir mensajes */
   pushLogs(state, messages);
 
-  /* ── ¿Muerte por daño directo? ── */
+  /* Muerte por daño directo */
   const defeated = state.players.find((p) => p.hp <= 0);
   if (defeated !== undefined) {
     const winner = state.players.find(
@@ -489,17 +473,17 @@ export function applyAction(
     return { state, messages, shot };
   }
 
-  /* ── Reducir escudo del que actuó ── */
+  /* Reducir escudo del que actuó */
   if (player.shield > 0) {
     player.shield -= 1;
   }
 
-  /* ── Paso ambiental ── */
+  /* Paso ambiental */
   const envMessages: string[] = [];
   advanceEnvironment(state, envMessages);
   pushLogs(state, envMessages);
 
-  /* ── ¿Muerte por cometa? ── */
+  /* Muerte por cometa */
   const meteorDead = state.players.find((p) => p.hp <= 0);
   if (meteorDead !== undefined) {
     const winner = state.players.find(
@@ -514,7 +498,7 @@ export function applyAction(
     return { state, messages, shot };
   }
 
-  /* ── ¿Turnos agotados? ── */
+  /* Turnos agotados */
   state.turnCount += 1;
 
   if (state.turnCount >= MAX_TURNS) {
@@ -534,7 +518,7 @@ export function applyAction(
     return { state, messages, shot };
   }
 
-  /* ── Cambio de turno ── */
+  /* Cambio de turno */
   state.turn = state.turn === 1 ? 2 : 1;
   const nextPlayer = state.players.find((p) => p.id === state.turn)!;
   pushLog(state, `Turno de ${nextPlayer.name}.`);

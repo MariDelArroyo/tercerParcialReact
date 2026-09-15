@@ -1,6 +1,4 @@
-/* ===========================
-   Variables globales
-   =========================== */
+/* Variables globales */
 :root {
   --bg-deep: #070b1a;
   --bg-card: #0f1730;
@@ -39,9 +37,7 @@ body {
   color: var(--text);
 }
 
-/* ===========================
-   Utilidades
-   =========================== */
+/* Utilidades */
 .primary-button {
   display: inline-block;
   background: linear-gradient(135deg, var(--accent), var(--accent-glow));
@@ -86,9 +82,7 @@ body {
   font-size: 0.95rem;
 }
 
-/* ===========================
-   Start Screen
-   =========================== */
+/* Start Screen */
 .start-screen {
   display: flex;
   height: 100vh;
@@ -172,9 +166,7 @@ body {
   margin-bottom: 4px;
 }
 
-/* ===========================
-   Game Screen
-   =========================== */
+/* Game Screen */
 .game-screen {
   display: flex;
   flex-direction: column;
@@ -454,9 +446,7 @@ body {
   color: var(--text-muted);
 }
 
-/* ===========================
-   Final Screen
-   =========================== */
+/* Final Screen */
 .final-screen {
   display: flex;
   align-items: center;
