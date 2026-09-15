@@ -7,7 +7,7 @@ export default function MessageLog({ messages }: MessageLogProps) {
 
   return (
     <div className="message-log" data-testid="message-log">
-      <h3>Registro de partida</h3>
+      <h3>Log de partida</h3>
       <ul>
         {visible.map((message, index) => (
           <li key={`${visible.length - index}-${message}`}>{message}</li>
