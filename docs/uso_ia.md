@@ -1,4 +1,4 @@
-# 🤖 Registro del uso de inteligencia artificial
+# Registro del uso de inteligencia artificial
 
 Se utilizó un asistente de IA (opencode / modelo big-pickle) como **asistente de
 desarrollo**, tal como lo permite el enunciado. Este documento registra qué se

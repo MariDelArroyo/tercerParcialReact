@@ -1,5 +1,27 @@
 import { test, expect } from "@playwright/test";
 
+const MAX_RETRIES = 6;
+const RETRY_DELAY_MS = 1500;
+
+function delay(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+test.beforeAll(async () => {
+  const base = process.env.BASE_URL ?? "http://localhost:3000";
+  for (let i = 0; i < MAX_RETRIES; i += 1) {
+    try {
+      const res = await fetch(`${base}/api/health`);
+      if (res.ok) {
+        return;
+      }
+    } catch {
+      // servidor aún no disponible (cold start de Render)
+    }
+    await delay(RETRY_DELAY_MS);
+  }
+});
+
 // ─────────────────────────────────────────────────────────
 //  Utilidad: crear una partida esperando la respuesta POST
 // ─────────────────────────────────────────────────────────
@@ -18,11 +40,56 @@ async function createGameFromUI(
 async function fetchState(
   page: import("@playwright/test").Page,
   gameId: string,
-): Promise<{ state: { status: string; turn: number } }> {
-  return page.evaluate(async (id) => {
-    const res = await fetch(`/api/games/${id as string}`);
-    return res.json();
-  }, gameId) as Promise<{ state: { status: string; turn: number } }>;
+): Promise<{ state?: { status: string; turn: number } } | null> {
+  for (let attempt = 0; attempt < MAX_RETRIES; attempt += 1) {
+    const found = await page.evaluate(async (id) => {
+      try {
+        const res = await fetch(`/api/games/${id as string}`);
+        if (!res.ok) {
+          return undefined;
+        }
+        return (await res.json()) as {
+          state: { status: string; turn: number };
+        };
+      } catch {
+        return undefined;
+      }
+    }, gameId);
+    if (found !== undefined) {
+      return found;
+    }
+    await delay(RETRY_DELAY_MS * (attempt + 1));
+  }
+  return null;
+}
+
+async function passViaApi(
+  page: import("@playwright/test").Page,
+  gameId: string,
+  player: number,
+): Promise<boolean> {
+  for (let attempt = 0; attempt < MAX_RETRIES; attempt += 1) {
+    const ok = await page.evaluate(async (args) => {
+      try {
+        const res = await fetch(`/api/games/${args.id}/actions`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            player: args.player,
+            action: { type: "pass" },
+          }),
+        });
+        return res.ok;
+      } catch {
+        return false;
+      }
+    }, { id: gameId, player });
+    if (ok) {
+      return true;
+    }
+    await delay(RETRY_DELAY_MS * (attempt + 1));
+  }
+  return false;
 }
 
 // ===========================================================
@@ -104,16 +171,18 @@ test("GET devuelve el estado de la partida recién creada", async ({
   const id = await page.getByTestId("tablero").getAttribute("data-game-id");
   expect(id).toBeTruthy();
 
-  const response = await page.evaluate(async (gameId) => {
-    const res = await fetch(`/api/games/${gameId as string}`);
-    const data = await res.json();
-    return data.state;
-  }, id);
+  const fetched = await fetchState(page, id as string);
+  expect(fetched?.state).toBeDefined();
 
-  expect(response.players[0].name).toBe("Ana");
-  expect(response.players[1].name).toBe("Beto");
-  expect(response.status).toBe("playing");
-  expect(response.maxTurns).toBe(60);
+  const state = fetched?.state as unknown as {
+    players: { name: string }[];
+    status: string;
+    maxTurns: number;
+  };
+  expect(state.players[0].name).toBe("Ana");
+  expect(state.players[1].name).toBe("Beto");
+  expect(state.status).toBe("playing");
+  expect(state.maxTurns).toBe(60);
 });
 
 // ===========================================================
@@ -129,28 +198,16 @@ test("la partida finaliza al alcanzar el límite de turnos", async ({
 
   // 58 pases vía API dejan el turno en 1 (Ana), igual que en la UI.
   for (let i = 0; i < 58; i += 1) {
-    const res = await page.evaluate(
-      async (args) => {
-        const r = await fetch(`/api/games/${args.id}/actions`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            player: args.turn,
-            action: { type: "pass" },
-          }),
-        });
-        return r.ok;
-      },
-      { id: gameId, turn: (i % 2) + 1 },
-    );
-    if (!res) {
+    const ok = await passViaApi(page, gameId as string, (i % 2) + 1);
+    if (!ok) {
       break;
     }
   }
 
-  const before = await fetchState(page, gameId);
+  const before = await fetchState(page, gameId as string);
+  expect(before?.state?.status).toBeDefined();
 
-  if (before.state.status === "playing") {
+  if (before?.state?.status === "playing") {
     // Turno 59 por UI (Ana), el turno mostrado coincide con el servidor.
     await page.getByTestId("btn-pasar").click();
     await expect(page.getByTestId("turno")).toContainText(/Beto/);
@@ -161,6 +218,6 @@ test("la partida finaliza al alcanzar el límite de turnos", async ({
 
   await expect(page.getByTestId("resultado")).toBeVisible();
 
-  const after = await fetchState(page, gameId);
-  expect(after.state.status).toBe("finished");
+  const after = await fetchState(page, gameId as string);
+  expect(after?.state?.status).toBe("finished");
 });
